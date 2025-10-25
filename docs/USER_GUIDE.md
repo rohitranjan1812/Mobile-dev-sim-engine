@@ -246,7 +246,7 @@ try:
     config = SimulationConfig(
         hazard_weight=0.5,
         vulnerability_weight=0.3,
-        exposure_weight=0.3  # Sum > 1.0, will raise error
+        exposure_weight=0.3  # Sum = 1.1 > 1.0, will raise error
     )
 except ValueError as e:
     print(f"Configuration error: {e}")
