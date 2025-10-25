@@ -1,0 +1,39 @@
+# Simulation Configuration
+
+# Number of samples to generate
+num_samples: 1000000
+
+# Batch size for processing
+batch_size: 10000
+
+# Random seed for reproducibility (null for random)
+random_seed: null
+
+# Risk factor weights (must sum to 1.0)
+risk_weights:
+  hazard: 0.4
+  vulnerability: 0.3
+  exposure: 0.3
+
+# Risk factor ranges
+risk_ranges:
+  hazard:
+    min: 0.0
+    max: 1.0
+  vulnerability:
+    min: 0.0
+    max: 1.0
+  exposure:
+    min: 0.0
+    max: 1.0
+
+# Price optimization parameters
+price_optimization:
+  base_property_price: 250000.0
+  risk_penalty_factor: 0.5
+
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
