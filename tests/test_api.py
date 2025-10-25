@@ -83,6 +83,8 @@ def test_simulate_endpoint_invalid_weights(client):
     assert response.status_code == 400
     data = json.loads(response.data)
     assert data['status'] == 'error'
+    # Should mention weights issue
+    assert 'weight' in data['message'].lower()
 
 
 def test_assess_risk_endpoint(client):
@@ -185,3 +187,4 @@ def test_api_error_handling(client):
     assert response.status_code == 400
     data = json.loads(response.data)
     assert data['status'] == 'error'
+    assert 'Invalid input parameters' in data['message']

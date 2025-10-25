@@ -73,11 +73,19 @@ def run_simulation():
             'price_statistics': price_stats
         }), 200
         
-    except Exception as e:
+    except ValueError as e:
+        # ValueError indicates invalid configuration
         return jsonify({
             'status': 'error',
-            'message': str(e)
+            'message': str(e)  # Config validation messages are safe to expose
         }), 400
+    except Exception as e:
+        # Log the error but don't expose details to user
+        app.logger.error(f"Simulation error: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred during simulation'
+        }), 500
 
 
 @app.route('/api/v1/assess-risk', methods=['POST'])
@@ -121,11 +129,19 @@ def assess_risk():
             'risk_categories': categories.tolist()
         }), 200
         
-    except Exception as e:
+    except (KeyError, ValueError) as e:
+        # KeyError/ValueError indicate invalid input
         return jsonify({
             'status': 'error',
-            'message': str(e)
+            'message': 'Invalid input parameters'
         }), 400
+    except Exception as e:
+        # Log the error but don't expose details to user
+        app.logger.error(f"Risk assessment error: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred during risk assessment'
+        }), 500
 
 
 @app.route('/api/v1/optimize-price', methods=['POST'])
@@ -155,11 +171,19 @@ def optimize_price():
             'prices': prices.tolist()
         }), 200
         
-    except Exception as e:
+    except (KeyError, ValueError) as e:
+        # KeyError/ValueError indicate invalid input
         return jsonify({
             'status': 'error',
-            'message': str(e)
+            'message': 'Invalid input parameters'
         }), 400
+    except Exception as e:
+        # Log the error but don't expose details to user
+        app.logger.error(f"Price optimization error: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred during price optimization'
+        }), 500
 
 
 @app.route('/api/v1/optimize-portfolio', methods=['POST'])
@@ -191,12 +215,22 @@ def optimize_portfolio():
             'portfolio': result
         }), 200
         
-    except Exception as e:
+    except (KeyError, ValueError) as e:
+        # KeyError/ValueError indicate invalid input
         return jsonify({
             'status': 'error',
-            'message': str(e)
+            'message': 'Invalid input parameters'
         }), 400
+    except Exception as e:
+        # Log the error but don't expose details to user
+        app.logger.error(f"Portfolio optimization error: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': 'An error occurred during portfolio optimization'
+        }), 500
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    import os
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)
